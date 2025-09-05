@@ -1,4 +1,0 @@
-# MINI AIRBNB
-
-
-
