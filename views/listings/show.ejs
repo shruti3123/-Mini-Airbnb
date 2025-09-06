@@ -6,14 +6,14 @@
           <h3>Listing Details</h3>
       </div>
       <div class="card col-6 offset-3 show-card">
-         <img src="<%= Listing.image.url  %>" class="card-img-top show-img" alt="listing_image">
+         <img src="<%= listing.image.url  %>" class="card-img-top show-img" alt="listing_image">
          <div class="card-body">
              <p class="card-text">
-               <b> <%= Listing.title  %></b><br>
-               <%= Listing.description  %><br>
-               <%= Listing.price ? `₹${Number(Listing.price).toLocaleString("en-IN")}/- night` : "0" %><br>
-               <%= Listing.location  %><br>
-               <%= Listing.country  %>
+               <b> <%= listing.title  %></b><br>
+               <%= listing.description  %><br>
+               <%= listing.price ? `₹${Number(listing.price).toLocaleString("en-IN")}/- night` : "0" %><br>
+               <%= listing.location  %><br>
+               <%= listing.country  %>
              </p>
           </div>
       </div>
@@ -24,9 +24,9 @@
   </div>
 
   <div class="btns">
-         <a href="/listings/<%=Listing._id %>/edit" class="btn btn-dark col-1 offset-3 add-btn">Edit </a>
+         <a href="/listings/<%=listing._id %>/edit" class="btn btn-dark col-1 offset-3 add-btn">Edit </a>
      
-        <form method="post" action="/listings/<%= Listing._id  %>?_method=DELETE">
+        <form method="post" action="/listings/<%= listing._id  %>?_method=DELETE">
            <button class="btn btn-dark  offset-5 ">Delete</button>
        </form>
      </div>

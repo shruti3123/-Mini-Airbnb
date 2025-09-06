@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const listing = require("./models/listing.js")
+const Listing = require("./models/listing.js")
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-
+const wrapAsync = require("./utils/wrapAsync.js");
 
 const mongoUrl ="mongodb://127.0.0.1:27017/wanderlust";
 main().then(() =>{
@@ -30,7 +30,7 @@ app.get("/",(req,res)=>{
 
 // index route
 app.get("/listings", async(req,res) =>{
-   const allListings = await listing.find({});
+   const allListings = await Listing.find({});
    res.render("listings/index.ejs" ,{allListings});
 })
 
@@ -42,13 +42,13 @@ app.get("/listings/new" ,(req, res) =>{
 // show route
 app.get("/listings/:id", async(req ,res) =>{
   let {id} = req.params;
- const Listing = await listing.findById(id);
-  res.render("listings/show.ejs",{Listing});
+ const listing = await Listing.findById(id);
+  res.render("listings/show.ejs",{listing});
 })
 
 //create route
 app.post("/listings", async(req,res) =>{
-   const newListing =   new listing(req.body.listing);
+   const newListing =  new Listing(req.body.listing);
    await newListing.save();
    res.redirect("/listings");
 })
@@ -57,21 +57,21 @@ app.post("/listings", async(req,res) =>{
 
 app.get("/listings/:id/edit", async(req, res) =>{
   let {id} = req.params;
- const Listing = await listing.findById(id);
- res.render("listings/edit.ejs" ,{Listing})
+ const listing = await Listing.findById(id);
+ res.render("listings/edit.ejs" ,{listing})
 })
 
 //update route
 app.put("/listings/:id", async(req, res) =>{
   let {id} = req.params;
-     await listing.findByIdAndUpdate(id,{...req.body.listing});
+     await Listing.findByIdAndUpdate(id,{...req.body.listing});
      res.redirect(`/listings/${id}`)
 })
 
 //delete route
 app.delete("/listings/:id", async(req, res) =>{
   let {id} = req.params;
-  let deletedListing = await listing.findByIdAndDelete(id);
+  let deletedListing = await Listing.findByIdAndDelete(id);
   console.log(deletedListing);
   res.redirect("/listings");
 })
@@ -94,6 +94,10 @@ app.delete("/listings/:id", async(req, res) =>{
 //   res.send("successfull..");
   
 // })
+
+app.use((err, req, res, next) =>{
+  res.send("something went wrong")
+})
 
 
 app.listen(8080,()=>{
